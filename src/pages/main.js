@@ -3,7 +3,19 @@ import { Keyboard, ActivityIndicator } from "react-native";
 import Icon from "@expo/vector-icons/MaterialIcons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import Api from "../services/api";
-import {} from "../styles";
+import {
+  Container,
+  Form,
+  Input,
+  SubmitButton,
+  List,
+  User,
+  Avatar,
+  Name,
+  Bio,
+  ProfileButton,
+  ProfileButtonText,
+} from "../styles";
 
 export default class Main extends Component {
   state = {
@@ -26,7 +38,7 @@ export default class Main extends Component {
     }
   }
 
-  handleAdduser = async () => {
+  handleAddUser = async () => {
     try {
       const { users, newUser } = this.state;
       this.setState({ loading: true });
@@ -53,7 +65,38 @@ export default class Main extends Component {
 
       Keyboard.dismiss();
     } catch (error) {
-        
+      alert("Usuário não encontrado!");
+      this.setState({ loading: false });
     }
   };
+
+  render() {
+    const { users, newUser, loading } = this.state;
+
+    return (
+      <Container>
+        <Form>
+          <Input
+            autoCorrect={false}
+            autoCapitalize="none"
+            placeholder="Adicionar usuário"
+            value={newUser}
+            onChangeText={(text) => this.setState({ newUser: text })}
+            returnKeyType="send"
+            onSubmitEditing={this.handleAddUser}
+          />
+          <SubmitButton loading={loading} onPress={this.handleAddUser}>
+            {loading ? (
+              <ActivityIndicator color="#fff" />
+            ) : (
+              <Icon name="add" size={20} color="#fff" />
+            )}
+          </SubmitButton>
+        </Form>
+        <List 
+          
+        />
+      </Container>
+    );
+  }
 }

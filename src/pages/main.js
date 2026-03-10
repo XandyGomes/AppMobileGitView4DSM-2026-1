@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { Keyboard, ActivityIndicator } from "react-native";
 import Icon from "@expo/vector-icons/MaterialIcons";
+import api from "../services/api";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import Api from "../services/api";
 import {
   Container,
   Form,
@@ -16,7 +16,6 @@ import {
   ProfileButton,
   ProfileButtonText,
 } from "../styles";
-
 export default class Main extends Component {
   state = {
     newUser: "",
@@ -42,27 +41,25 @@ export default class Main extends Component {
     try {
       const { users, newUser } = this.state;
       this.setState({ loading: true });
-
-      const response = await Api.get(`/users/${newUser}`);
+      const response = await api.get(`/users/${newUser}`);
       if (users.find((user) => user.login === response.data.login)) {
         alert("Usuário já adicionado!");
         this.setState({ loading: false });
         return;
       }
-
       const data = {
         name: response.data.name,
         login: response.data.login,
         bio: response.data.bio,
         avatar: response.data.avatar_url,
       };
+      console.log(data);
 
       this.setState({
         users: [...users, data],
         newUser: "",
         loading: false,
       });
-
       Keyboard.dismiss();
     } catch (error) {
       alert("Usuário não encontrado!");
@@ -72,7 +69,6 @@ export default class Main extends Component {
 
   render() {
     const { users, newUser, loading } = this.state;
-
     return (
       <Container>
         <Form>
@@ -93,8 +89,21 @@ export default class Main extends Component {
             )}
           </SubmitButton>
         </Form>
-        <List 
-          
+
+        <List
+          showsVerticalScrollIndicator={false}
+          data={users}
+          keyExtractor={(user) => user.login}
+          renderItem={({ item }) => (
+            <User>
+              <Avatar source={{ uri: item.avatar }} />
+              <Name>{item.name}</Name>
+              <Bio>{item.bio}</Bio>
+              <ProfileButton onPress={() => {}}>
+                <ProfileButtonText>Ver Perfil</ProfileButtonText>
+              </ProfileButton>
+            </User>
+          )}
         />
       </Container>
     );

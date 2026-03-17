@@ -99,8 +99,24 @@ export default class Main extends Component {
               <Avatar source={{ uri: item.avatar }} />
               <Name>{item.name}</Name>
               <Bio>{item.bio}</Bio>
-              <ProfileButton onPress={() => {}}>
+              <ProfileButton
+                onPress={() => {
+                  this.props.navigation.navigate("user", { user: item });
+                }}
+              >
                 <ProfileButtonText>Ver Perfil</ProfileButtonText>
+              </ProfileButton>
+              <ProfileButton
+                onPress={() => {
+                  this.setState({
+                    users: this.state.users.filter(
+                      (user) => user.login !== item.login,
+                    ),
+                  });
+                }}
+                style={{ backgroundColor: "#fd92a4ff" }}
+              >
+                <ProfileButtonText>Excluir</ProfileButtonText>
               </ProfileButton>
             </User>
           )}

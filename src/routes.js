@@ -4,6 +4,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import Login from "./pages/login";
 import Main from "./pages/main";
 import User from "./pages/user";
+import Cadastro from "./pages/cadastro";
 
 const Stack = createStackNavigator();
 
@@ -12,7 +13,7 @@ export default function Routes() {
     <NavigationContainer>
       <Stack.Navigator>
         <Stack.Screen
-          name="login"
+          name="Login"
           component={Login}
           options={{
             title: "LOGIN",
@@ -27,7 +28,7 @@ export default function Routes() {
           }}
         />
         <Stack.Screen
-          name="main"
+          name="Main"
           component={Main}
           options={{
             title: "GitHub VIEWER",
@@ -42,10 +43,25 @@ export default function Routes() {
           }}
         />
         <Stack.Screen
-          name="user"
+          name="User"
           component={User}
           options={{
             title: "Perfil do Usuário",
+            headerTitleAlign: "center",
+            headerStyle: {
+              backgroundColor: "#9705f9c2",
+            },
+            headerTitleStyle: {
+              fontWeight: "bold",
+              color: "#fff",
+            },
+          }}
+        />
+        <Stack.Screen
+          name="Cadastro"
+          component={Cadastro}
+          options={{
+            title: "Cadastro de Usuário",
             headerTitleAlign: "center",
             headerStyle: {
               backgroundColor: "#9705f9c2",

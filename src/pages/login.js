@@ -8,19 +8,31 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    if (email === "" && password === "") {
-      navigation.navigate("main");
-    } else {
-      Alert.alert("E-mail ou senha inválidos!");
+  const handleLogin = async () => {
+    const user = await AsyncStorage.getItem("user")
+    if(!user){
+      alert("Nenhum usuário cadastrado!")
+      return
+    }
+    const userJson = JSON.parse(user)
+    if(userJson.email === email && userJson.password === password){
+      navigation.navigate("Main")
+    }else{
+      alert("E-mail ou senha inválidos!")
     }
   };
+
+  const handleCadastro = () => {
+    navigation.navigate("Cadastro")
+  }
 
   return (
     <View style={styles.container}>
@@ -38,7 +50,11 @@ const Login = () => {
         onChangeText={setPassword}
       />
       <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>ENTRAR</Text>
+        <Text style={styles.buttonText}>Entrar</Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity style={styles.button} onPress={handleCadastro}>
+        <Text style={styles.buttonText}>Cadastrar</Text>
       </TouchableOpacity>
     </View>
   );
@@ -65,10 +81,12 @@ const styles = StyleSheet.create({
     padding: 10,
     width: "80%",
     alignItems: "center",
+    marginTop: 8,
   },
   buttonText: {
     color: "#fff",
     fontWeight: "bold",
+    textTransform: "uppercase",
   },
 });
 
